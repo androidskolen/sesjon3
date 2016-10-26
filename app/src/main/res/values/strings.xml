@@ -6,4 +6,6 @@
     <string name="publish_own_user_button">Publish</string>
     <string name="user_email_hint">email</string>
     <string name="user_telephone_hint">telephone</string>
+    <string name="action_goto_own_activity">Go home</string>
+    <string name="action_show_about">About</string>
 </resources>

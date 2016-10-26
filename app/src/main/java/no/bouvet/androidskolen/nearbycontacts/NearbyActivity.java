@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -35,6 +38,7 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
     private ContactDetectedListener contactDetectedListener;
     private GoogleApiClient googleApiClient;
     private Message activeMessage;
+    private Preferences preferences;
 
     public void setContactDetectedListener(ContactDetectedListener listener) {
         contactDetectedListener = listener;
@@ -54,6 +58,8 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
         addNearbyContactsFragmentIfNotExists();
 
         setContactDetectedListener(NearbyContactsListViewModel.INSTANCE);
+
+        preferences = new Preferences();
 
     }
 
@@ -81,7 +87,8 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
                 }
 
                 String messageAsJson = new String(message.getContent());
-                Log.d(TAG, "Found message: " + messageAsJson);
+                String msg = "Found message: " + messageAsJson;
+                Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
 
                 Contact contact = Contact.fromJson(messageAsJson);
                 fireContactDetected(contact);
@@ -101,7 +108,8 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
             public void onLost(Message message) {
                 Log.d(TAG, "[onLost]");
                 String messageAsJson = new String(message.getContent());
-                Log.d(TAG, "Lost sight of message: " + messageAsJson);
+                String msg = "Lost sight of message: " + messageAsJson;
+                Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
 
                 Contact contact = Contact.fromJson(messageAsJson);
                 fireContactLost(contact);
@@ -122,8 +130,18 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
         super.onStart();
 
         Log.d(TAG, "[onStart]");
+
+        Contact contact = preferences.createContactFromPreferences(getApplicationContext());
+        if (contact == null) {
+            // Vi dialog om at man må gå og fylle ut informasjon om seg selv.
+            return;
+        }
+
+        OwnContactViewModel.INSTANCE.setContact(contact);
         googleApiClient.connect();
     }
+
+
 
     @Override
     protected void onStop() {
@@ -137,6 +155,13 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
             googleApiClient.disconnect();
             resetModels();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.nearby_activity_actions, menu);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void resetModels() {
