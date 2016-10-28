@@ -2,15 +2,18 @@ package no.bouvet.androidskolen.nearbycontacts;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -28,6 +31,7 @@ import no.bouvet.androidskolen.nearbycontacts.models.NearbyContactsListViewModel
 import no.bouvet.androidskolen.nearbycontacts.models.OwnContactViewModel;
 import no.bouvet.androidskolen.nearbycontacts.models.Contact;
 import no.bouvet.androidskolen.nearbycontacts.models.SelectedContactViewModel;
+import no.bouvet.androidskolen.nearbycontacts.views.AboutView;
 
 public class NearbyActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ContactSelectedListener {
 
@@ -88,7 +92,8 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
 
                 String messageAsJson = new String(message.getContent());
                 String msg = "Found message: " + messageAsJson;
-                Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
+                toast.show();
 
                 Contact contact = Contact.fromJson(messageAsJson);
                 fireContactDetected(contact);
@@ -109,7 +114,8 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
                 Log.d(TAG, "[onLost]");
                 String messageAsJson = new String(message.getContent());
                 String msg = "Lost sight of message: " + messageAsJson;
-                Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
+                toast.show();
 
                 Contact contact = Contact.fromJson(messageAsJson);
                 fireContactLost(contact);
@@ -161,7 +167,40 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.nearby_activity_actions, menu);
 
-        return super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_goto_own_activity:
+                gotoOwnContactActivity();
+                return true;
+            case R.id.action_show_about:
+                showAboutDialog();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showAboutDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(new AboutView(this))
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Just close the dialog
+                    }
+                })
+                .create();
+
+        dialog.show();
+    }
+
+    private void gotoOwnContactActivity() {
+        Intent intent = new Intent(this, OwnContactActivity.class);
+        startActivity(intent);
     }
 
     private void resetModels() {

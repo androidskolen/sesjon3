@@ -10,6 +10,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
+        buildConfigField "boolean", "IDE_BUILD", "" + (project.properties['android.injected.invoked.from.ide'] != null);
     }
     buildTypes {
         release {
