@@ -14,6 +14,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.bouvet.androidskolen.nearbycontacts.adapers.ContactAdapter;
 import no.bouvet.androidskolen.nearbycontacts.models.Contact;
 import no.bouvet.androidskolen.nearbycontacts.models.ModelUpdateListener;
 import no.bouvet.androidskolen.nearbycontacts.models.NearbyContactsListViewModel;
@@ -23,7 +24,7 @@ public class NearbyContactsFragment extends Fragment implements AdapterView.OnIt
 
     private ListView listView;
     private ContactSelectedListener contactSelectedListener;
-    private ArrayAdapter<Contact> contactsArrayAdapter;
+    private ContactAdapter<Contact> contactsArrayAdapter;
 
     @Override
     public void onModelChanged() {
@@ -37,7 +38,7 @@ public class NearbyContactsFragment extends Fragment implements AdapterView.OnIt
         View view = inflater.inflate(R.layout.nearby_contacts_fragment, container, false);
 
         listView = (ListView) view.findViewById(R.id.nearby_contacts_listView);
-        contactsArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.nearby_contacts_listview_item, new ArrayList<Contact>());
+        contactsArrayAdapter = new ContactAdapter(getContext());
         listView.setAdapter(contactsArrayAdapter);
         listView.setOnItemClickListener(this);
 
