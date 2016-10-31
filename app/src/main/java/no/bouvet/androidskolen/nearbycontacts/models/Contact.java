@@ -1,8 +1,11 @@
 package no.bouvet.androidskolen.nearbycontacts.models;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import com.google.gson.Gson;
+
 
 public class Contact {
 
@@ -11,7 +14,7 @@ public class Contact {
     private final String name;
     private final String email;
     private final String telephone;
-    private Bitmap picture;
+    private String base64EncodedPicture;
 
     public Contact(String name, String email, String telephone) {
         this.name = name;
@@ -19,10 +22,11 @@ public class Contact {
         this.telephone = telephone;
     }
 
-    public Contact(String name, String email, String telephone, Bitmap picture) {
+    public Contact(String name, String email, String telephone, String picture) {
         this.name = name;
         this.email = email;
         this.telephone = telephone;
+        this.base64EncodedPicture = picture;
     }
 
     public String getName() {
@@ -38,11 +42,19 @@ public class Contact {
     }
 
     public Bitmap getPicture() {
-        return picture;
+        if (this.base64EncodedPicture != null) {
+            return decodeBase64(this.base64EncodedPicture);
+        } else {
+            return null;
+        }
     }
 
-    public void setPicture(Bitmap picture) {
-        this.picture = picture;
+    public String getEncodedPicture() {
+        return base64EncodedPicture;
+    }
+
+    public void setPicture(String picture) {
+        this.base64EncodedPicture = "";
     }
 
     @Override
@@ -58,4 +70,8 @@ public class Contact {
         return gson.fromJson(json, Contact.class);
     }
 
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedBytes = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
 }
