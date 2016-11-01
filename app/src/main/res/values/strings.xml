@@ -14,5 +14,7 @@
     <string name="versionName">VersionName %1$s</string>
     <string name="versionCode">VersionCode %1$s</string>
     <string name="timeStamp">Build time %1$s</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="remove_picture">Remove picture</string>
 
 </resources>

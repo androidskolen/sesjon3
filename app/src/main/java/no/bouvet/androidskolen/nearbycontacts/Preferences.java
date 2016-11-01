@@ -45,6 +45,5 @@ public class Preferences {
         edit.putString(PREFERENCES_PICTURE, contact.getEncodedPicture());
 
         edit.apply();
-
     }
 }

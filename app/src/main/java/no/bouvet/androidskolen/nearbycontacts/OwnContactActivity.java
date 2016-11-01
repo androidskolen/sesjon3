@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
     private EditText userTelephoneEditText;
     private ImageView userPicture;
     private Preferences preferences;
+    private Contact contact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,9 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
         Button takePictureButton = (Button) findViewById(R.id.take_picture_button);
         takePictureButton.setOnClickListener(this);
 
+        Button removePictureButton = (Button) findViewById(R.id.remove_picture_button);
+        removePictureButton.setOnClickListener(this);
+
         userNameEditText = (EditText) findViewById(R.id.user_name_editText);
         userEmailEditText = (EditText) findViewById(R.id.user_email_editText);
         userTelephoneEditText = (EditText) findViewById(R.id.user_telephone_editText);
@@ -54,7 +59,7 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
     protected void onStart() {
         super.onStart();
 
-        Contact contact = preferences.createContactFromPreferences(getApplicationContext());
+        contact = preferences.createContactFromPreferences(getApplicationContext());
         if (contact != null) {
             userNameEditText.setText(contact.getName());
             userEmailEditText.setText(contact.getEmail());
@@ -84,15 +89,32 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
             case R.id.take_picture_button:
                 takePicture();
                 break;
+            case R.id.remove_picture_button:
+                removePicture();
+                break;
         }
+    }
+
+    private void removePicture() {
+        Log.i("Nearby-by-Bouvet", "Removing the picture ");
+        userPicture.setImageBitmap(null);
+        contact.setPicture(null);
+        userPicture.refreshDrawableState();
+        saveContact();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            userPicture.setImageBitmap((Bitmap) extras.get("data"));
+            userPicture.setImageBitmap(createThumbnail((Bitmap) extras.get("data")));
         }
+    }
+
+    private Bitmap createThumbnail(Bitmap bitmap) {
+        int dimension = getSquareCropDimensionForBitmap(bitmap);
+        Log.i("Nearby-by-Bouvet", "Creating Thumbnail with dimension " + dimension);
+        return ThumbnailUtils.extractThumbnail(bitmap, 100, 100);
     }
 
     private void takePicture() {
@@ -108,6 +130,7 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void saveContact() {
+        Log.i("Nearby-by-Bouvet", "Saving the Contact");
         Contact contact = createContactFromInput();
         preferences.saveContactToPreferences(contact, getApplicationContext());
         OwnContactViewModel.INSTANCE.setContact(contact);
@@ -118,21 +141,33 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
         String email = userEmailEditText.getText().toString();
         String telephone = userTelephoneEditText.getText().toString();
         String picture = getEncodedPicutre();
-        return new Contact(name, email, telephone, picture);
+        Contact newContact = new Contact(name, email, telephone, picture);
+        Log.i("Nearby-by-Bouvet", "Created Contact from Input" + newContact.toJson());
+        return newContact;
     }
 
     private String getEncodedPicutre() {
         if (userPicture.getDrawable() != null) {
             Bitmap bitmap = ((BitmapDrawable) userPicture.getDrawable()).getBitmap();
+
             return encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 10);
         } else {
             return null;
         }
     }
 
+    public int getSquareCropDimensionForBitmap(Bitmap bitmap) {
+        return Math.min(bitmap.getWidth(), bitmap.getHeight());
+    }
+
     public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+        if (image != null) {
+            ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+            image.compress(compressFormat, quality, byteArrayOS);
+            return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+        } else {
+            return "";
+        }
+
     }
 }
