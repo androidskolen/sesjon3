@@ -1,12 +1,15 @@
 package no.bouvet.androidskolen.nearbycontacts;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -98,8 +101,6 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
     private void removePicture() {
         Log.i("Nearby-by-Bouvet", "Removing the picture ");
         userPicture.setImageBitmap(null);
-        contact.setPicture(null);
-        userPicture.refreshDrawableState();
         saveContact();
     }
 
