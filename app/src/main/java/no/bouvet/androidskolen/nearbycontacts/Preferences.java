@@ -29,7 +29,7 @@ public class Preferences {
         String telephone = preferences.getString(PREFERENCE_TELEPHONE, "");
         String picture = preferences.getString(PREFERENCES_PICTURE, "");
 
-        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(email) && TextUtils.isEmpty(telephone))
+        if (TextUtils.isEmpty(name) && TextUtils.isEmpty(email) && TextUtils.isEmpty(telephone) && TextUtils.isEmpty(picture))
             return null;
 
         return new Contact(name, email, telephone, picture);

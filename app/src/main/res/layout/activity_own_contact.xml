@@ -13,7 +13,7 @@
         android:id="@+id/user_picture_imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="100dp" />
+        android:minWidth="100dp"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
@@ -64,8 +64,8 @@
             android:id="@+id/take_picture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
             android:background="@color/colorAccent"
             android:text="@string/take_picture" />
 
@@ -73,8 +73,8 @@
             android:id="@+id/remove_picture_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
             android:background="@color/colorAccent"
             android:text="@string/remove_picture" />
 
@@ -82,8 +82,8 @@
             android:id="@+id/start_nearby_activity_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
             android:background="@color/colorAccent"
             android:text="@string/publish_own_user_button" />
 
