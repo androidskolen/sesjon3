@@ -22,7 +22,7 @@ public class NoPictureDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.take_picture, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ((OwnContactActivity)getActivity()).takePicture();
+                                ((OwnContactActivity)getActivity()).startImageCaptureActivityForResult();
                             }
                         }
                 )

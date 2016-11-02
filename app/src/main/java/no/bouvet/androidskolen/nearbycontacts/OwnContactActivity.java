@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -81,7 +80,7 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
                 handlePublish();
                 break;
             case R.id.take_picture_button:
-                takePicture();
+                startImageCaptureActivityForResult();
                 break;
             case R.id.remove_picture_button:
                 removePicture();
@@ -113,8 +112,12 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             removePicture();
             Bundle extras = data.getExtras();
+
+            // Siden vi skal sende bilde i en kanal med begrenset plass bruker vi
+            // en thumbnail. Et alternativ er å ha to varianter av bilde, et som man viser
+            // og et som man sender. Men vi holder det enkelt.
+            // Velger også å croppe bildet til kvadratisk form for at det skal se bedre ut.
             userPicture.setImageBitmap(ThumbnailUtils.extractThumbnail((Bitmap) extras.get("data"), 100, 100));
-            Log.i("MIN-LOGG", "Satt userPicture: " + ((BitmapDrawable) userPicture.getDrawable()).getBitmap());
         }
     }
 
@@ -123,7 +126,9 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
         saveContact();
     }
 
-    void takePicture() {
+    // Starter en Camera Activity for å ta bilde med resultatet returnert i et onActivityResult
+    // callback.
+    void startImageCaptureActivityForResult() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
