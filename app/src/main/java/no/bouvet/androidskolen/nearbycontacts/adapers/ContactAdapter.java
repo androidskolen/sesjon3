@@ -22,19 +22,16 @@ public class ContactAdapter<C> extends ArrayAdapter<Contact> {
     @Override
     public View getView (int position, View convertView, ViewGroup parent) {
 
+        // TODO Oppage 3.4. Utvid nearby_contacts_listview_item til å vise mer informasjon
+
         Contact contact = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.nearby_contacts_listview_item, parent, false);
         }
-        TextView name = (TextView) convertView.findViewById(R.id.list_view_name);
-        TextView email = (TextView) convertView.findViewById(R.id.list_view_email);
-        TextView telephone = (TextView) convertView.findViewById(R.id.list_view_telephone);
-        ImageView picture = (ImageView) convertView.findViewById(R.id.list_view_picture);
 
+        TextView name = (TextView) convertView.findViewById(R.id.list_view_name);
         name.setText(contact.getName());
-        email.setText(contact.getEmail());
-        telephone.setText(contact.getTelephone());
-        picture.setImageBitmap(contact.getPicture());
+
         return convertView;
     }
 }

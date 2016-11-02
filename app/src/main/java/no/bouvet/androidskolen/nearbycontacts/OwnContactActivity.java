@@ -25,7 +25,6 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
     private EditText userNameEditText;
     private EditText userEmailEditText;
     private EditText userTelephoneEditText;
-    private ImageView userPicture;
     private Preferences preferences;
 
     @Override
@@ -40,13 +39,11 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
         Button takePictureButton = (Button) findViewById(R.id.take_picture_button);
         takePictureButton.setOnClickListener(this);
 
-        Button removePictureButton = (Button) findViewById(R.id.remove_picture_button);
-        removePictureButton.setOnClickListener(this);
+        // TODO 3.2. Sett onClickListener på remove knapp som er lagt til i layout
 
         userNameEditText = (EditText) findViewById(R.id.user_name_editText);
         userEmailEditText = (EditText) findViewById(R.id.user_email_editText);
         userTelephoneEditText = (EditText) findViewById(R.id.user_telephone_editText);
-        userPicture = (ImageView) findViewById(R.id.user_picture_imageView);
 
         preferences = new Preferences();
     }
@@ -60,9 +57,6 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
             userNameEditText.setText(contact.getName());
             userEmailEditText.setText(contact.getEmail());
             userTelephoneEditText.setText(contact.getTelephone());
-            if (contact.getPicture() != null) {
-                userPicture.setImageBitmap(contact.getPicture());
-            }
         }
     }
 
@@ -82,24 +76,15 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
             case R.id.take_picture_button:
                 startImageCaptureActivityForResult();
                 break;
-            case R.id.remove_picture_button:
-                removePicture();
-                break;
+            // TODO Oppgave 3.2. Håndter klikk-event for remove picture knapp.
         }
     }
 
     private void handlePublish() {
-        if (!isUserPictureSet()) {
-            startNoPictureDialogFragment();
-        } else {
-            saveContact();
-            startNearbyActivity();
-        }
-    }
+        // Oppgave 3.5. Lag en sjekk på at bilde er satt. Dersom ikke, vis en dialog ved å starte NoPictureDialogFragment.
+        saveContact();
+        startNearbyActivity();
 
-    private boolean isUserPictureSet() {
-        return userPicture.getDrawable() != null &&
-                ((BitmapDrawable) userPicture.getDrawable()).getBitmap() != null;
     }
 
     private void startNoPictureDialogFragment() {
@@ -110,29 +95,22 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            removePicture();
-            Bundle extras = data.getExtras();
+            // TODO Oppgave 3.1
 
             // Siden vi skal sende bilde i en kanal med begrenset plass bruker vi
             // en thumbnail. Et alternativ er å ha to varianter av bilde, et som man viser
             // og et som man sender. Men vi holder det enkelt.
             // Velger også å croppe bildet til kvadratisk form for at det skal se bedre ut.
-            userPicture.setImageBitmap(ThumbnailUtils.extractThumbnail((Bitmap) extras.get("data"), 100, 100));
+
         }
     }
 
-    private void removePicture() {
-        userPicture.setImageBitmap(null);
-        saveContact();
-    }
 
     // Starter en Camera Activity for å ta bilde med resultatet returnert i et onActivityResult
     // callback.
     void startImageCaptureActivityForResult() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
+        // TODO Oppgave 3.1. Husk startActivityForResult med request kode REQUEST_IMAGE_CAPTURE
+
     }
 
     void startNearbyActivity() {
@@ -155,12 +133,8 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
     }
 
     private String getEncodedPicture() {
-        if (isUserPictureSet()) {
-            Bitmap bitmap = ((BitmapDrawable) userPicture.getDrawable()).getBitmap();
-            return encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 10);
-        } else {
-            return "";
-        }
+        // TODO oppgave 3.4. Hent base64 encodet bilde fra View i layout.
+        return "";
     }
 
     private String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {

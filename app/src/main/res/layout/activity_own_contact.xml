@@ -9,12 +9,6 @@
     android:padding="@dimen/activity_padding"
     tools:context="no.bouvet.androidskolen.nearbycontacts.OwnContactActivity">
 
-    <ImageView
-        android:id="@+id/user_picture_imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="100dp"/>
-
     <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -66,13 +60,6 @@
             android:layout_height="wrap_content"
             style="@style/ButtonStyle"
             android:text="@string/take_picture" />
-
-        <Button
-            android:id="@+id/remove_picture_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/ButtonStyle"
-            android:text="@string/remove_picture" />
 
         <Button
             android:id="@+id/start_nearby_activity_button"

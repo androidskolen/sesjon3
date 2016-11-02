@@ -14,26 +14,18 @@ public class NoPictureDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        super.onCreateDialog(savedInstanceState);
+        return super.onCreateDialog(savedInstanceState);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.no_picture_dialog_message)
-                .setTitle(R.string.no_picture_dialog_title)
-                .setPositiveButton(R.string.take_picture, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ((OwnContactActivity)getActivity()).startImageCaptureActivityForResult();
-                            }
-                        }
-                )
-                .setNegativeButton(R.string.nope, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((OwnContactActivity)getActivity()).saveContact();
-                        ((OwnContactActivity)getActivity()).startNearbyActivity();
-                    }
-                });
+       // TODO Oppgave 3.5 Opprette en AlertDialog og returner denne. Dersom negative respons kaller
+       // man publishContachWithoutImage(), dersom positive kaller man startImageCaptureActivityForResult
+    }
 
-        return builder.create();
+    private void publishContactWithoutImage() {
+        ((OwnContactActivity)getActivity()).saveContact();
+        ((OwnContactActivity)getActivity()).startNearbyActivity();
+    }
+
+    private void startImageCaptureActivityForResult() {
+        ((OwnContactActivity)getActivity()).startImageCaptureActivityForResult();
     }
 }
