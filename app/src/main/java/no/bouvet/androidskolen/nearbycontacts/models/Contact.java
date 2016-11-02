@@ -16,12 +16,6 @@ public class Contact {
     private final String telephone;
     private String base64EncodedPicture;
 
-    public Contact(String name, String email, String telephone) {
-        this.name = name;
-        this.email = email;
-        this.telephone = telephone;
-    }
-
     public Contact(String name, String email, String telephone, String picture) {
         this.name = name;
         this.email = email;

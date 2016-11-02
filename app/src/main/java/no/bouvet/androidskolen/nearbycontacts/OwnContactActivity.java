@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,7 +61,7 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
             userNameEditText.setText(contact.getName());
             userEmailEditText.setText(contact.getEmail());
             userTelephoneEditText.setText(contact.getTelephone());
-            if (userPicture != null) {
+            if (contact.getPicture() != null) {
                 userPicture.setImageBitmap(contact.getPicture());
             }
         }
@@ -113,6 +114,7 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
             removePicture();
             Bundle extras = data.getExtras();
             userPicture.setImageBitmap(ThumbnailUtils.extractThumbnail((Bitmap) extras.get("data"), 100, 100));
+            Log.i("MIN-LOGG", "Satt userPicture: " + ((BitmapDrawable) userPicture.getDrawable()).getBitmap());
         }
     }
 
@@ -148,11 +150,11 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
     }
 
     private String getEncodedPicture() {
-        if (userPicture.getDrawable() != null) {
+        if (isUserPictureSet()) {
             Bitmap bitmap = ((BitmapDrawable) userPicture.getDrawable()).getBitmap();
             return encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 10);
         } else {
-            return null;
+            return "";
         }
     }
 
@@ -162,7 +164,7 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
             image.compress(compressFormat, quality, byteArrayOS);
             return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
         } else {
-            return null;
+            return "";
         }
     }
 }
