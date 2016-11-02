@@ -93,9 +93,7 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
                 String messageAsJson = new String(message.getContent());
                 Contact contact = Contact.fromJson(messageAsJson);
 
-                String msg = "Found contact: " + contact.getName();
-                Toast toast = Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
-                toast.show();
+                // TODO Oppgave 2.3. Lag en toast som viser navnet på Contact som blir detektert.
 
                 fireContactDetected(contact);
             }
@@ -114,9 +112,6 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
             public void onLost(Message message) {
                 Log.d(TAG, "[onLost]");
                 String messageAsJson = new String(message.getContent());
-                String msg = "Lost sight of message: " + messageAsJson;
-                Toast toast = Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
-                toast.show();
 
                 Contact contact = Contact.fromJson(messageAsJson);
                 fireContactLost(contact);
@@ -164,26 +159,8 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.nearby_activity_actions, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_goto_own_activity:
-                gotoOwnContactActivity();
-                return true;
-            case R.id.action_show_about:
-                showAboutDialog();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+    // TODO Oppgave 2.1. Legg til to menuitems som skal legges i actionbaren. Det ene itemet skal
+    // trigge gotoOwnContactActivity() mens det andre skal trigge showAboutDialog().
 
     private void showAboutDialog() {
         AlertDialog dialog = new AlertDialog.Builder(this)
