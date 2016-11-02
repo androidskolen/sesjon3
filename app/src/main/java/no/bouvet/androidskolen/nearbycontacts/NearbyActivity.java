@@ -91,11 +91,12 @@ public class NearbyActivity extends AppCompatActivity implements GoogleApiClient
                 }
 
                 String messageAsJson = new String(message.getContent());
-                String msg = "Found message: " + messageAsJson;
+                Contact contact = Contact.fromJson(messageAsJson);
+
+                String msg = "Found contact: " + contact.getName();
                 Toast toast = Toast.makeText(NearbyActivity.this, msg, Toast.LENGTH_LONG);
                 toast.show();
 
-                Contact contact = Contact.fromJson(messageAsJson);
                 fireContactDetected(contact);
             }
 

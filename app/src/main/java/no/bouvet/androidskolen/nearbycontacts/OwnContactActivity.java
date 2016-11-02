@@ -163,7 +163,7 @@ public class OwnContactActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
+    private String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
         if (image != null) {
             ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
             image.compress(compressFormat, quality, byteArrayOS);
