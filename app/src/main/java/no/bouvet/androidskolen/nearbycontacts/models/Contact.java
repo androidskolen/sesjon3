@@ -3,6 +3,7 @@ package no.bouvet.androidskolen.nearbycontacts.models;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -65,7 +66,15 @@ public class Contact {
     }
 
     public static Bitmap decodeBase64(String input) {
-        byte[] decodedBytes = Base64.decode(input, 0);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        Bitmap image = null;
+        try {
+            byte[] decodedBytes = Base64.decode(input, 0);
+            image = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        } catch (Exception e) {
+            Log.e("ANDROIDSKOLEN", "Kunne ikke dekode bilde");
+        }
+
+        return image;
+
     }
 }
